@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="GameZone — 16 free browser games by Lochan Kumar Nayak. Play Tetris, Snake, 2048, Sudoku and more. No downloads needed."/>
+  <meta name="author" content="Lochan Kumar Nayak"/>
+  <title>GameZone — Free Browser Games by Lochan Kumar Nayak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="platform.css"/>
+</head>
+<body>
+
+  <!-- ══ CURSOR GLOW ══ -->
+  <div id="cursorGlow" class="cursor-glow"></div>
+
+  <!-- ══ TOAST ══ -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-brand" aria-label="GameZone Home">
+      <span class="brand-icon">🎮</span>
+      <span class="brand-text">GameZone</span>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#games"        class="nav-link" data-haptic="light">🎲 Games</a>
+      <a href="#leaderboard"  class="nav-link" data-haptic="light">🏆 Leaderboard</a>
+      <a href="#achievements" class="nav-link" data-haptic="light">🏅 Achievements</a>
+      <a href="#stats"        class="nav-link" data-haptic="light">📊 My Stats</a>
+      <a href="payment.html"  class="nav-link nav-vip-link" data-haptic="medium">👑 Go VIP</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-box" type="text" id="searchInput" placeholder="Search games…" aria-label="Search games"/>
+      </div>
+      <button id="profileBtn" class="profile-nav-btn" title="Your Profile" data-haptic="light">
+        <span id="navAvatar">🎮</span>
+        <span id="navName">Player</span>
+        <span id="navVipCrown" class="nav-vip-crown hidden">👑</span>
+      </button>
+      <button id="themeBtn" class="icon-btn" title="Toggle theme" data-haptic="light">☀️</button>
+      <button id="logoutBtn" class="icon-btn logout-btn" title="Sign Out" data-haptic="medium">🚪</button>
+      <button id="hamburger" class="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Guest banner -->
+    <div id="guestBanner" class="guest-banner hidden">
+      👻 Playing as Guest —
+      <a href="login.html" data-haptic="medium">Sign up free</a> to save your progress &amp; earn XP!
+    </div>
+  </nav>
+
+  <!-- ══ PROFILE MODAL ══ -->
+  <div id="profileModal" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Your Profile">
+    <div class="profile-panel">
+      <button class="close-btn" id="closeProfile" aria-label="Close profile" data-haptic="light">✕</button>
+      <h2 class="panel-title">👤 Your Profile</h2>
+      <div class="profile-header">
+        <div class="avatar-picker" id="avatarPicker"></div>
+        <div class="profile-meta">
+          <input id="usernameInput" class="username-input" type="text" placeholder="Enter your name…" maxlength="20" aria-label="Username"/>
+          <div class="xp-bar-wrap">
+            <div class="xp-label">Level <span id="playerLevel">1</span> · <span id="playerXP">0</span> XP</div>
+            <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+            <div class="xp-next" id="xpNext"></div>
+          </div>
+          <div class="profile-badges" id="profileBadges"></div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="btn" id="saveProfile" data-haptic="medium">💾 Save Profile</button>
+        <a href="payment.html" class="btn btn-gold" data-haptic="medium">👑 Upgrade to VIP</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="hero">
+    <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-content reveal">
+        <div class="hero-eyebrow">
+          <span class="daily-badge" id="dailyBadge">⚡ Daily Challenge</span>
+          <span class="owner-tag">by Lochan Kumar Nayak</span>
+        </div>
+        <h1>Play <span class="gradient-text">16 Free Games</span><br/>Right in Your Browser</h1>
+        <p>No downloads. No installs. Just pure fun — puzzles, arcade, strategy &amp; more. Built with ❤️ for everyone.</p>
+        <div class="hero-actions">
+          <a href="#games" class="hero-btn" data-haptic="medium">
+            <span>Browse Games</span> <span class="btn-arrow">↓</span>
+          </a>
+          <a href="#" class="hero-btn-outline" id="dailyChallengeBtn" data-haptic="medium">
+            🎯 Today's Challenge
+          </a>
+        </div>
+      </div>
+      <div class="hero-stats-panel reveal reveal-delay">
+        <div class="hero-stat">
+          <span id="hsTotalGames">0</span>
+          <small>Games Played</small>
+        </div>
+        <div class="hero-stat">
+          <span id="hsTotalScore">0</span>
+          <small>Total Score</small>
+        </div>
+        <div class="hero-stat">
+          <span id="hsAchievements">0</span>
+          <small>Achievements</small>
+        </div>
+        <div class="hero-stat">
+          <span>16</span>
+          <small>Free Games</small>
+        </div>
+      </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- ══ RECENTLY PLAYED ══ -->
+  <section class="recent-section reveal" id="recentSection" style="display:none">
+    <div class="container">
+      <h2 class="section-title-sm">🕐 Recently Played</h2>
+      <div class="recent-row" id="recentRow"></div>
+    </div>
+  </section>
+
+  <!-- ══ CATEGORY FILTER ══ -->
+  <section id="categories" class="categories-section reveal">
+    <div class="container">
+      <div class="cat-pills" role="group" aria-label="Filter by category">
+        <button class="cat-pill active" data-cat="all"     data-haptic="light">All Games</button>
+        <button class="cat-pill" data-cat="puzzle"  data-haptic="light">🧩 Puzzle</button>
+        <button class="cat-pill" data-cat="arcade"  data-haptic="light">🕹️ Arcade</button>
+        <button class="cat-pill" data-cat="strategy"data-haptic="light">♟️ Strategy</button>
+        <button class="cat-pill" data-cat="word"    data-haptic="light">📝 Word</button>
+        <button class="cat-pill" data-cat="action"  data-haptic="light">⚡ Action</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ GAMES GRID ══ -->
+  <section id="games" class="games-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">🎲 All Games</h2>
+        <div class="sort-row">
+          <label class="sort-label" for="sortSelect">Sort by:</label>
+          <select id="sortSelect" class="sort-select" aria-label="Sort games">
+            <option value="default">Default</option>
+            <option value="name">Name A–Z</option>
+            <option value="score">Top Score</option>
+            <option value="recent">Recently Played</option>
+          </select>
+        </div>
+      </div>
+      <div class="games-grid" id="gamesGrid">
+
+        <a class="game-card" href="games/memory/index.html" data-cat="puzzle" data-name="memory match" data-key="memoryMatch_easy" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#6c63ff,#a78bfa)"><span>🧠</span></div>
+          <div class="card-info">
+            <h3>Memory Match</h3>
+            <p>Flip cards and find matching pairs before time runs out.</p>
+            <div class="card-meta"><span class="badge puzzle">Puzzle</span><span class="card-best" data-key="memoryMatch_easy"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/snake/index.html" data-cat="arcade" data-name="snake" data-key="gz_snake" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#11998e,#38ef7d)"><span>🐍</span></div>
+          <div class="card-info">
+            <h3>Snake</h3>
+            <p>Eat food, grow longer, don't hit the walls or yourself!</p>
+            <div class="card-meta"><span class="badge arcade">Arcade</span><span class="card-best" data-key="gz_snake"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/tetris/index.html" data-cat="puzzle" data-name="tetris" data-key="gz_tetris" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#f7971e,#ffd200)"><span>🟦</span></div>
+          <div class="card-info">
+            <h3>Tetris</h3>
+            <p>Stack falling blocks and clear lines to score big.</p>
+            <div class="card-meta"><span class="badge puzzle">Puzzle</span><span class="card-best" data-key="gz_tetris"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/2048/index.html" data-cat="puzzle" data-name="2048" data-key="gz_2048" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#f953c6,#b91d73)"><span>2️⃣0️⃣4️⃣8️⃣</span></div>
+          <div class="card-info">
+            <h3>2048</h3>
+            <p>Slide tiles and merge numbers to reach 2048.</p>
+            <div class="card-meta"><span class="badge puzzle">Puzzle</span><span class="card-best" data-key="gz_2048"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/flappy/index.html" data-cat="arcade" data-name="flappy bird" data-key="gz_flappy" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#43cea2,#185a9d)"><span>🐦</span></div>
+          <div class="card-info">
+            <h3>Flappy Bird</h3>
+            <p>Tap to fly through pipes without crashing.</p>
+            <div class="card-meta"><span class="badge arcade">Arcade</span><span class="card-best" data-key="gz_flappy"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/whackamole/index.html" data-cat="action" data-name="whack a mole" data-key="gz_whack" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#c94b4b,#4b134f)"><span>🔨</span></div>
+          <div class="card-info">
+            <h3>Whack-a-Mole</h3>
+            <p>Smash moles as fast as you can before they hide!</p>
+            <div class="card-meta"><span class="badge action">Action</span><span class="card-best" data-key="gz_whack"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/typing/index.html" data-cat="word" data-name="typing speed" data-key="gz_typing" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"><span>⌨️</span></div>
+          <div class="card-info">
+            <h3>Typing Speed</h3>
+            <p>Race against the clock — how fast can you type?</p>
+            <div class="card-meta"><span class="badge word">Word</span><span class="card-best" data-key="gz_typing"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/sudoku/index.html" data-cat="strategy" data-name="sudoku" data-key="gz_sudoku" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)"><span>🔢</span></div>
+          <div class="card-info">
+            <h3>Sudoku</h3>
+            <p>Fill the 9×9 grid so every row, column and box has 1–9.</p>
+            <div class="card-meta"><span class="badge strategy">Strategy</span><span class="card-best" data-key="gz_sudoku"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/breakout/index.html" data-cat="arcade" data-name="breakout" data-key="gz_breakout" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#f83600,#f9d423)"><span>🧱</span></div>
+          <div class="card-info">
+            <h3>Breakout</h3>
+            <p>Bounce the ball and smash all the bricks to win.</p>
+            <div class="card-meta"><span class="badge arcade">Arcade</span><span class="card-best" data-key="gz_breakout"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/tictactoe/index.html" data-cat="strategy" data-name="tic tac toe" data-key="gz_ttt" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#0f2027,#2c5364)"><span>❌⭕</span></div>
+          <div class="card-info">
+            <h3>Tic-Tac-Toe</h3>
+            <p>Classic X vs O — play against a smart AI opponent.</p>
+            <div class="card-meta"><span class="badge strategy">Strategy</span><span class="card-best" data-key="gz_ttt"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/simon/index.html" data-cat="puzzle" data-name="simon says" data-key="gz_simon" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"><span>🔴🟢🔵🟡</span></div>
+          <div class="card-info">
+            <h3>Simon Says</h3>
+            <p>Memorize and repeat the growing color sequence.</p>
+            <div class="card-meta"><span class="badge puzzle">Puzzle</span><span class="card-best" data-key="gz_simon"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/wordscramble/index.html" data-cat="word" data-name="word scramble" data-key="gz_wordscramble" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#56ab2f,#a8e063)"><span>🔤</span></div>
+          <div class="card-info">
+            <h3>Word Scramble</h3>
+            <p>Unscramble the jumbled letters to find the hidden word.</p>
+            <div class="card-meta"><span class="badge word">Word</span><span class="card-best" data-key="gz_wordscramble"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/mathquiz/index.html" data-cat="puzzle" data-name="math quiz" data-key="gz_mathquiz" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#fc4a1a,#f7b733)"><span>➕➖✖️</span></div>
+          <div class="card-info">
+            <h3>Math Quiz</h3>
+            <p>Solve rapid-fire math problems against the clock.</p>
+            <div class="card-meta"><span class="badge puzzle">Puzzle</span><span class="card-best" data-key="gz_mathquiz"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/colorflood/index.html" data-cat="strategy" data-name="color flood" data-key="gz_colorflood" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#ee0979,#ff6a00)"><span>🎨</span></div>
+          <div class="card-info">
+            <h3>Color Flood</h3>
+            <p>Flood-fill the board with one color in limited moves.</p>
+            <div class="card-meta"><span class="badge strategy">Strategy</span><span class="card-best" data-key="gz_colorflood"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/minesweeper/index.html" data-cat="strategy" data-name="minesweeper" data-key="gz_ms_9x9" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#373b44,#4286f4)"><span>💣</span></div>
+          <div class="card-info">
+            <h3>Minesweeper</h3>
+            <p>Reveal all safe cells without triggering a mine.</p>
+            <div class="card-meta"><span class="badge strategy">Strategy</span><span class="card-best" data-key="gz_ms_9x9"></span></div>
+          </div>
+        </a>
+
+        <a class="game-card" href="games/rps/index.html" data-cat="action" data-name="rock paper scissors" data-key="gz_rps" data-haptic="medium">
+          <div class="card-thumb" style="background:linear-gradient(135deg,#8e2de2,#4a00e0)"><span>✊✋✌️</span></div>
+          <div class="card-info">
+            <h3>Rock Paper Scissors</h3>
+            <p>Best of 5 against the computer — can you win?</p>
+            <div class="card-meta"><span class="badge action">Action</span><span class="card-best" data-key="gz_rps"></span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LEADERBOARD ══ -->
+  <section id="leaderboard" class="lb-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">🏆 Leaderboard</h2>
+      </div>
+      <div class="lb-tabs reveal" id="lbTabs"></div>
+      <div class="lb-table-wrap reveal">
+        <table class="lb-table" id="lbTable">
+          <thead><tr><th>Rank</th><th>Player</th><th>Game</th><th>Score</th><th>Date</th></tr></thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+        <div id="lbEmpty" class="lb-empty hidden">
+          <div style="font-size:3rem">🎮</div>
+          <p>No scores yet — play some games to appear here!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ACHIEVEMENTS ══ -->
+  <section id="achievements" class="achievements-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">🏅 Achievements</h2>
+        <span class="section-sub" id="achCount"></span>
+      </div>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ══ STATS DASHBOARD ══ -->
+  <section id="stats" class="stats-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">📊 My Stats</h2>
+      </div>
+      <div class="stats-dashboard" id="statsDashboard"></div>
+    </div>
+  </section>
+
+  <!-- ══ VIP BANNER ══ -->
+  <section class="vip-banner-section reveal" id="vipBannerSection">
+    <div class="container">
+      <div class="vip-banner">
+        <div class="vip-banner-left">
+          <div class="vip-crown">👑</div>
+          <div>
+            <h3>Support GameZone &amp; Unlock VIP Perks</h3>
+            <p>Get 2× XP, gold leaderboard frame, exclusive themes &amp; a VIP crown badge</p>
+          </div>
+        </div>
+        <div class="vip-banner-right">
+          <div class="vip-plans-mini">
+            <div class="vip-plan-mini"><span>🌱</span><strong>₹49</strong><small>Starter</small></div>
+            <div class="vip-plan-mini popular-mini"><span>🚀</span><strong>₹149</strong><small>Pro</small></div>
+            <div class="vip-plan-mini"><span>👑</span><strong>₹499</strong><small>Legend</small></div>
+          </div>
+          <a href="payment.html" class="vip-cta-btn" data-haptic="heavy">✨ Become VIP</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-logo">🎮 <strong>GameZone</strong></div>
+        <p class="footer-tagline">16 free browser games — no downloads, no sign-up, just fun.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" title="Twitter" data-haptic="light">🐦</a>
+          <a href="#" class="social-btn" title="GitHub"  data-haptic="light">💻</a>
+          <a href="#" class="social-btn" title="Discord" data-haptic="light">💬</a>
+        </div>
+      </div>
+      <div class="footer-links-col">
+        <h4>Games</h4>
+        <a href="#games">All Games</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#achievements">Achievements</a>
+        <a href="payment.html">VIP Plans</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Account</h4>
+        <a href="login.html">Sign In</a>
+        <a href="login.html">Create Account</a>
+        <a href="#stats">My Stats</a>
+        <a href="#" id="footerLogout">Sign Out</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Info</h4>
+        <a href="#">About</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- OWNER CREDIT -->
+    <div class="footer-owner">
+      <div class="owner-card">
+        <div class="owner-avatar">👨‍💻</div>
+        <div class="owner-info">
+          <span class="owner-label">Designed &amp; Developed by</span>
+          <strong class="owner-name">Lochan Kumar Nayak</strong>
+          <span class="owner-title">Full-Stack Developer &amp; Game Designer</span>
+        </div>
+        <div class="owner-badge">© 2025</div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 GameZone by <strong>Lochan Kumar Nayak</strong>. All rights reserved.</p>
+      <p class="footer-tech">Built with HTML · CSS · Vanilla JavaScript · ❤️</p>
+    </div>
+  </footer>
+
+  <!-- ══ BACK TO TOP ══ -->
+  <button id="backToTop" class="back-to-top hidden" aria-label="Back to top" data-haptic="light">↑</button>
+
+  <script src="platform.js"></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support GameZone — VIP Plans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="payment.css"/>
+  <!-- Razorpay Checkout SDK — loads the real payment popup -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- ══ TOPBAR ══ -->
+  <header class="pay-topbar">
+    <a href="index.html" class="back-link">← Back to GameZone</a>
+    <div class="pay-brand">🎮 <span>GameZone</span> <span class="pay-brand-sub">VIP Support</span></div>
+    <div class="secure-badge">🔒 Powered by Razorpay</div>
+  </header>
+
+  <!-- ══ SERVER STATUS BAR ══ -->
+  <div id="serverStatus" class="server-status checking">
+    ⏳ Checking payment server…
+  </div>
+
+  <main class="pay-main">
+
+    <!-- ══ HERO ══ -->
+    <section class="pay-hero">
+      <div class="pay-hero-text">
+        <div class="vip-pill">👑 Become a VIP Supporter</div>
+        <h1>Support GameZone &amp;<br/><span class="grad">Unlock Exclusive Perks</span></h1>
+        <p>Your support keeps 16 free games alive. Pay securely via UPI, Net Banking, Cards, Wallets &amp; EMI — powered by Razorpay.</p>
+        <div class="gateway-logos">
+          <span class="gw-logo">📱 UPI</span>
+          <span class="gw-logo">🏦 Net Banking</span>
+          <span class="gw-logo">💳 Cards</span>
+          <span class="gw-logo">👛 Wallets</span>
+          <span class="gw-logo">📅 EMI</span>
+        </div>
+      </div>
+      <div class="perks-preview">
+        <div class="perk-item"><span>👑</span><div><strong>VIP Crown Badge</strong><small>Shown on your profile &amp; leaderboard</small></div></div>
+        <div class="perk-item"><span>⚡</span><div><strong>2× XP Boost</strong><small>Earn double XP on every game</small></div></div>
+        <div class="perk-item"><span>🎨</span><div><strong>Exclusive Themes</strong><small>Premium color themes unlocked</small></div></div>
+        <div class="perk-item"><span>🏆</span><div><strong>Gold Leaderboard Frame</strong><small>Stand out with a golden border</small></div></div>
+        <div class="perk-item"><span>🎯</span><div><strong>Bonus Daily Challenges</strong><small>Extra challenges every day</small></div></div>
+        <div class="perk-item"><span>💎</span><div><strong>Supporter Certificate</strong><small>Digital certificate of support</small></div></div>
+      </div>
+    </section>
+
+    <!-- ══ PLAN SELECTOR ══ -->
+    <section class="plan-section">
+      <h2 class="section-label">Choose Your Support Plan</h2>
+      <div class="plan-grid" id="planGrid">
+
+        <div class="plan-card" data-plan="starter" data-amount="49" data-label="Starter" data-xp="500">
+          <div class="plan-badge">🌱</div>
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">₹49<span>/one-time</span></div>
+          <ul class="plan-perks">
+            <li>✅ VIP Badge (1 month)</li>
+            <li>✅ 500 Bonus XP</li>
+            <li>✅ Supporter Certificate</li>
+            <li class="dim">❌ 2× XP Boost</li>
+            <li class="dim">❌ Premium Themes</li>
+          </ul>
+          <button class="plan-btn">Select Plan</button>
+        </div>
+
+        <div class="plan-card popular" data-plan="pro" data-amount="149" data-label="Pro" data-xp="2000">
+          <div class="popular-tag">⭐ Most Popular</div>
+          <div class="plan-badge">🚀</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">₹149<span>/one-time</span></div>
+          <ul class="plan-perks">
+            <li>✅ VIP Badge (6 months)</li>
+            <li>✅ 2,000 Bonus XP</li>
+            <li>✅ 2× XP Boost (30 days)</li>
+            <li>✅ 3 Premium Themes</li>
+            <li>✅ Gold Leaderboard Frame</li>
+          </ul>
+          <button class="plan-btn">Select Plan</button>
+        </div>
+
+        <div class="plan-card" data-plan="legend" data-amount="499" data-label="Legend" data-xp="10000">
+          <div class="plan-badge">👑</div>
+          <div class="plan-name">Legend</div>
+          <div class="plan-price">₹499<span>/one-time</span></div>
+          <ul class="plan-perks">
+            <li>✅ VIP Badge (Lifetime)</li>
+            <li>✅ 10,000 Bonus XP</li>
+            <li>✅ 2× XP Boost (Lifetime)</li>
+            <li>✅ All Premium Themes</li>
+            <li>✅ Gold Frame + Name Color</li>
+          </ul>
+          <button class="plan-btn">Select Plan</button>
+        </div>
+
+        <div class="plan-card custom-plan" data-plan="custom" data-amount="0" data-label="Custom" data-xp="0">
+          <div class="plan-badge">💝</div>
+          <div class="plan-name">Custom Amount</div>
+          <div class="plan-price-custom">
+            <span class="rupee">₹</span>
+            <input type="number" id="customAmount" placeholder="Any amount" min="10" max="99999"/>
+          </div>
+          <p class="custom-note">Minimum ₹10 · Any amount helps!</p>
+          <ul class="plan-perks">
+            <li>✅ VIP Badge (1 month)</li>
+            <li>✅ Bonus XP (2× amount)</li>
+            <li>✅ Supporter Certificate</li>
+          </ul>
+          <button class="plan-btn">Select Plan</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ CHECKOUT PANEL ══ -->
+    <section class="checkout-section" id="checkoutSection">
+      <div class="checkout-card">
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h3 class="order-title">📋 Order Summary</h3>
+          <div class="order-row"><span>Plan</span><strong id="sumPlan">— Select a plan above —</strong></div>
+          <div class="order-row"><span>Amount</span><strong id="sumAmount">₹0</strong></div>
+          <div class="order-row"><span>XP Reward</span><strong id="sumXP" class="xp-val">0 XP</strong></div>
+          <div class="order-row total"><span>Total Payable</span><strong id="sumTotal">₹0</strong></div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info-section">
+          <h3 class="order-title">👤 Your Details</h3>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="payerName" placeholder="Your full name" autocomplete="name"/>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="payerEmail" placeholder="your@email.com" autocomplete="email"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="payerPhone" placeholder="10-digit mobile number" maxlength="10" autocomplete="tel"/>
+          </div>
+        </div>
+
+        <!-- Pay Button -->
+        <div class="pay-action">
+          <button class="pay-now-btn" id="payNowBtn" disabled>
+            <span class="pay-lock">🔒</span>
+            <span id="payBtnText">Select a plan to continue</span>
+          </button>
+          <button class="pay-now-btn demo-pay-btn hidden" id="demoPayBtn">
+            <span>🎮</span>
+            <span id="demoBtnText">Demo Pay (No real charge)</span>
+          </button>
+          <p class="pay-note">
+            Secured by <strong>Razorpay</strong> · Supports UPI, Cards, Net Banking, Wallets &amp; EMI
+          </p>
+        </div>
+
+        <!-- Payment method icons -->
+        <div class="method-icons">
+          <div class="method-icon" title="Google Pay">
+            <div class="mi-circle" style="background:#4285f4">G</div><small>GPay</small>
+          </div>
+          <div class="method-icon" title="PhonePe">
+            <div class="mi-circle" style="background:#5f259f">P</div><small>PhonePe</small>
+          </div>
+          <div class="method-icon" title="Paytm">
+            <div class="mi-circle" style="background:#00baf2">P</div><small>Paytm</small>
+          </div>
+          <div class="method-icon" title="BHIM UPI">
+            <div class="mi-circle" style="background:#00a651">B</div><small>BHIM</small>
+          </div>
+          <div class="method-icon" title="Visa">
+            <div class="mi-circle" style="background:#1a1f71;font-size:0.6rem;font-style:italic">VISA</div><small>Visa</small>
+          </div>
+          <div class="method-icon" title="Mastercard">
+            <div class="mi-circle" style="background:#eb001b;font-size:0.55rem">MC</div><small>MC</small>
+          </div>
+          <div class="method-icon" title="RuPay">
+            <div class="mi-circle" style="background:#f47920;font-size:0.55rem">RP</div><small>RuPay</small>
+          </div>
+          <div class="method-icon" title="Net Banking">
+            <div class="mi-circle" style="background:#2c5364">🏦</div><small>NB</small>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ SUCCESS PANEL (shown after payment) ══ -->
+    <div class="modal-overlay hidden" id="successModal">
+      <div class="modal-box success-box">
+        <div class="success-anim">✅</div>
+        <h3>Payment Successful! 🎉</h3>
+        <p id="successMsg">Thank you for supporting GameZone!</p>
+        <div class="receipt" id="receipt"></div>
+        <div class="perks-unlocked" id="perksUnlocked"></div>
+        <div class="receipt-actions">
+          <button class="pay-now-btn" id="goToPlatform">🎮 Go Play Now!</button>
+          <button class="cancel-btn" id="downloadReceipt">📄 Download Receipt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRUST BADGES ══ -->
+    <section class="trust-section">
+      <div class="trust-grid">
+        <div class="trust-item">🔒<span>256-bit SSL Encryption</span></div>
+        <div class="trust-item">🛡️<span>PCI DSS Compliant</span></div>
+        <div class="trust-item">🏦<span>RBI Regulated</span></div>
+        <div class="trust-item">↩️<span>7-Day Refund Policy</span></div>
+        <div class="trust-item">📞<span>24/7 Support</span></div>
+        <div class="trust-item">✅<span>Razorpay Secured</span></div>
+      </div>
+    </section>
+
+    <!-- ══ FAQ ══ -->
+    <section class="faq-section">
+      <h2 class="section-label">Frequently Asked Questions</h2>
+      <div class="faq-list" id="faqList"></div>
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="pay-footer">
+    <p>🎮 GameZone by <strong>Lochan Kumar Nayak</strong> · Payments powered by <strong>Razorpay</strong></p>
+    <p style="margin-top:4px;font-size:0.75rem;opacity:0.6">© 2025 · All rights reserved</p>
+  </footer>
+
+  <script src="payment.js"></script>
+</body>
+</html>
